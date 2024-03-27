@@ -1,0 +1,51 @@
+{
+  "originHash" : "91e91eef7df8189f434a2bec96e1c78ac9fea124174ee2b94edf75912a8de05d",
+  "pins" : [
+    {
+      "identity" : "bigint",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/attaswift/BigInt.git",
+      "state" : {
+        "revision" : "0ed110f7555c34ff468e72e1686e59721f2b0da6",
+        "version" : "5.3.0"
+      }
+    },
+    {
+      "identity" : "cryptoswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/krzyzanowskim/CryptoSwift.git",
+      "state" : {
+        "revision" : "039f56c5d7960f277087a0be51f5eb04ed0ec073",
+        "version" : "1.5.1"
+      }
+    },
+    {
+      "identity" : "flow-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Outblock/flow-swift",
+      "state" : {
+        "revision" : "ac9b3f5f7653c5791057910257c2b416e5084d97",
+        "version" : "0.3.5"
+      }
+    },
+    {
+      "identity" : "wallet-core",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/trustwallet/wallet-core",
+      "state" : {
+        "revision" : "c4ffde3d170821fd0c5c50512505222c59e47db7",
+        "version" : "4.0.29"
+      }
+    },
+    {
+      "identity" : "web3swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/web3swift-team/web3swift",
+      "state" : {
+        "revision" : "74c24f4d3d5f1816616e9ebd16741ca5f7a57eb0",
+        "version" : "3.2.0"
+      }
+    }
+  ],
+  "version" : 3
+}
