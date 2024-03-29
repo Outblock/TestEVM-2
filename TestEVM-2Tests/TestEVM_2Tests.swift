@@ -128,29 +128,30 @@ final class TestEVM_2Tests: XCTestCase {
             return
         }
         
-//        let textData = Data.randomBytes(length: 32)!
-        let hashedData = Hash.sha256(data: textData)
-//        let signableData = Flow.DomainTag.user.rawValue.data(using: .utf8)! + textData
+        /// Wallet
+//        let hashedData = Hash.sha256(data: textData)
+        let hashedData = Utilities.hashPersonalMessage(textData)!
         let signableData = Flow.DomainTag.user.normalize + hashedData
-        let pk = hdWallet.getKeyByCurve(curve: .secp256k1, derivationPath: flowPath)
         let hashed = Hash.sha256(data: signableData)
+        let pk = hdWallet.getKeyByCurve(curve: .secp256k1, derivationPath: flowPath)
         let sig = pk.sign(digest: hashed, curve: .secp256k1)!.dropLast()
         
         let proof = COAOwnershipProof(keyIninces: [0], address: address.data, capabilityPath: "evm", signatures: [sig])
         let encoded = RLP.encode(proof.rlpList)!
+        
+        
+        /// DApp verify
         let contract = web3.contract(coaABI, at: ethAddress)!
-//        print("pubK ===> \(pk.getPublicKeySecp256k1(compressed: false).data.hexValue)")
-        print("flow address ===> \(pk.data.hexValue)")
+        
         print("flow address ===> \(address)")
         print("coa address ===> \(ethAddress.address)")
-//        print("orginal message ===> \(text)")
-        print("message data ===> \(textData.hexString)")
+        print("message data ===> \(hashedData.hexString)")
         print("signableData message ===> \(signableData.hexString)")
         print("hashed message ===> \(hashed.hexString)")
         print("sig ===> \(sig.hexString)")
         print("encoded ===> \(encoded.hexString)")
+        
         let read = contract.createReadOperation("isValidSignature", parameters: [hashedData, encoded])!
-//        read.transaction.from = ethAddress
         let response = try await read.callContractMethod()
         
         guard let data = response["0"] as? Data else {
@@ -162,25 +163,6 @@ final class TestEVM_2Tests: XCTestCase {
         
         print(response)
         print(data.hexValue)
-        
         XCTAssertEqual(data.hexValue.addHexPrefix(), magicValue)
-        
-        
-        let result = try! await flow.executeScriptAtLatestBlock(cadence: """
-        import EVM from 0xb6763b4399a888c8
-
-        access(all)
-        fun main(tx: [UInt8], coinbaseBytes: [UInt8; 20]) {
-            let coinbase = EVM.EVMAddress(bytes: coinbaseBytes)
-            EVM.run(tx: tx, coinbase: coinbase)
-        }
-        """, arguments: [
-                .array(read.data!.map{ Flow.Cadence.FValue.uint8($0) }),
-                .array(ethAddress.addressData.map{ Flow.Cadence.FValue.uint8($0) })
-            ]
-        )
-        
-        print(result)
-        
     }
 }
